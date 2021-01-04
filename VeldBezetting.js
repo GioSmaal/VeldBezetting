@@ -1,5 +1,6 @@
 window.onload = load;
 
+
 function load() { 
     var blocks = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 
     'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5', 'e1', 'e2', 'e3', 'e4', 'e5']
@@ -50,27 +51,28 @@ function load() {
         var fieldNumber = document.createTextNode(squad[i]);
         position.appendChild(fieldNumber);
         document.getElementById("players").appendChild(position);
-
+        document.getElementById("player" + squad[i]).addEventListener('mousedown', moving);
     } 
 
-    var selectedPlayer;
-    console.log(numbers.value);
-    selectedPlayer = document.getElementById(numbers.value);
 
-    selectedPlayer.onmousedown = function(event) {
-        selectedPlayer = document.getElementById(numbers.value);
+    var movingPlayer = document.getElementById(numbers.value);
+
+    function moving(event) {
+        movingPlayer = document.getElementById(numbers.value);
+
+        if (movingPlayer.id == this.id) {
         // (1) prepare to moving: make absolute and on top by z-index
-        selectedPlayer.style.position = 'absolute';
-        selectedPlayer.style.zIndex = 1000;
+        movingPlayer.style.position = 'absolute';
+        movingPlayer.style.zIndex = 1000;
     
         // move it out of any current parents directly into body
         // to make it positioned relative to the body
-        document.body.append(selectedPlayer);
+        document.body.append(movingPlayer);
     
         // centers the selectedPlayer at (pageX, pageY) coordinates
         function moveAt(pageX, pageY) {
-            selectedPlayer.style.left = pageX - selectedPlayer.offsetWidth / 2 + 'px';
-            selectedPlayer.style.top = pageY - selectedPlayer.offsetHeight / 2 + 'px';
+            movingPlayer.style.left = pageX - movingPlayer.offsetWidth / 2 + 'px';
+            movingPlayer.style.top = pageY - movingPlayer.offsetHeight / 2 + 'px';
         }
     
         // move our absolutely positioned selectedPlayer under the pointer
@@ -84,11 +86,11 @@ function load() {
         document.addEventListener('mousemove', onMouseMove);
     
         // (3) drop the selectedPlayer, remove unneeded handlers
-        selectedPlayer.onmouseup = function() {
+        movingPlayer.onmouseup = function() {
             document.removeEventListener('mousemove', onMouseMove);
-            selectedPlayer.onmouseup = null;
+            movingPlayer.onmouseup = null;
         };
-  
+    }
   };
 
 }
