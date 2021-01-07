@@ -2,22 +2,26 @@ window.onload = load;
 
 
 function load() { 
-    var blocks = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 
-    'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5', 'e1', 'e2', 'e3', 'e4', 'e5']
-    var countX = 35;
-    var countY = 2;
+    var blocks = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 
+    '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25']
+
+    var countX = 153;
+    var countY = 32;
 
     var squad = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
         
 
     for (var j = 0; j < blocks.length; j++) { //background colored blocks
         var divMaker = document.createElement("div");
+
+        divMaker.id = "block" + blocks[j];
         
         divMaker.style.position = "absolute";
-        divMaker.style.marginLeft = countX + "%";
-        divMaker.style.marginTop = countY + "%";
+        divMaker.style.marginLeft = countX + "px";
+        divMaker.style.marginTop = countY + "px";
 
         divMaker.style.width = "86px";
+
         divMaker.style.height = "134px";
 
         divMaker.style.opacity = "0.5";
@@ -27,12 +31,13 @@ function load() {
 
         document.getElementById("blocks").appendChild(divMaker);
 
-        if (countX > 55) {
-            countX = 29.3;
-            countY = countY + 8.9;
+        if (countX > 500) {
+            countX = 65;
+            countY = countY + 136;
         }
 
-        countX = countX + 5.7;
+        countX = countX + 88;
+
     }
 
     for (var i = 0; i < squad.length; i++) { //player dots
@@ -58,6 +63,7 @@ function load() {
     var movingPlayer = document.getElementById(numbers.value);
 
     function moving(event) {
+
         movingPlayer = document.getElementById(numbers.value);
 
         if (movingPlayer.id == this.id) {
@@ -84,12 +90,63 @@ function load() {
     
         // (2) move the selectedPlayer on mousemove
         document.addEventListener('mousemove', onMouseMove);
-    
+        
         // (3) drop the selectedPlayer, remove unneeded handlers
         movingPlayer.onmouseup = function() {
+
             document.removeEventListener('mousemove', onMouseMove);
             movingPlayer.onmouseup = null;
+
+            for (var k = 1; k < 25; k++) {
+                movingPlayer = document.getElementById(numbers.value);
+                var topValueMovingPlayer = parseInt(movingPlayer.style.top, 10); //convert text to string to compare them
+                var topValueBlock = parseInt(document.getElementById('block' + [k]).style.marginTop, 10);
+                var downValueMovingPlayer = parseInt(movingPlayer.style.bottom, 10);
+                var heightValueBlock = parseInt(document.getElementById('block' + [k]).style.height, 10);
+                var downValueBlock = topValueBlock + heightValueBlock;
+                
+                var leftValueMovingPlayer = parseInt(movingPlayer.style.left, 10);
+                var leftValueBlock = parseInt(document.getElementById('block' + [k]).style.marginLeft, 10);
+                var widthValueBlock = parseInt(document.getElementById('block' + [k]).style.width, 10);
+                var rightValueBlock = leftValueBlock + widthValueBlock;
+
+                if (topValueMovingPlayer >= topValueBlock && topValueMovingPlayer <= downValueBlock && leftValueMovingPlayer >= leftValueBlock && leftValueMovingPlayer <= rightValueBlock) { //check if this player is in any block
+                
+                    document.getElementById('block' + [k]).style.background = "green";
+                    console.log("blue");
+    
+                }
+    
+                else {
+
+                    for (var p = 1; p < 12; p++) {
+
+                    movingPlayer = document.getElementById("player" + [p])
+                    
+                    
+                    topValueMovingPlayer = parseInt(movingPlayer.style.top, 10);
+                    downValueMovingPlayer = parseInt(movingPlayer.style.bottom, 10);
+                    leftValueMovingPlayer = parseInt(movingPlayer.style.left, 10);
+
+                        if (topValueMovingPlayer >= topValueBlock && topValueMovingPlayer <= downValueBlock && leftValueMovingPlayer >= leftValueBlock && leftValueMovingPlayer <= rightValueBlock) {//check if any player is in this block
+                            console.log("nothing");
+                            document.getElementById('block' + [k]).style.background = "green";
+                            break;
+                        }
+
+                        else {
+                            console.log("red");
+                            document.getElementById('block' + [k]).style.background = "red";
+                        }
+                    }
+                }
+
+
+                
+
+            }
         };
+
     }
   };
 
